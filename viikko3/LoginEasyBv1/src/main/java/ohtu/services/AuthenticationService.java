@@ -39,7 +39,9 @@ public class AuthenticationService {
     }
 
     private boolean invalid(String username, String password) {
-        // validity check of username and password
+        if (username.length()<3 && !username.contains("a-z")){
+            return false;
+        }
 
         return false;
     }
