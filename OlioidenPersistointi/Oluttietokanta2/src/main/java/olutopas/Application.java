@@ -46,7 +46,13 @@ public class Application {
                 addPub();            
             } else if (command.equals("7")) {
                 addBeerToPub();
-            }  else {
+            } else if (command.equals("8")) {
+                showBeersInPub();
+            } else if (command.equals("9")) {
+                listPubs();
+            } else if (command.equals("a")) {
+                removePub();
+            } else {
                 System.out.println("unknown command");
             }
 
@@ -65,7 +71,10 @@ public class Application {
         System.out.println("4   list breweries");
         System.out.println("5   delete beer");
         System.out.println("6   add pub");               
-        System.out.println("7   add beer to pub");                      
+        System.out.println("7   add beer to pub");    
+        System.out.println("8   show beers in pubs");
+        System.out.println("9   show pubs");
+        System.out.println("a   remove beer from pub");
         System.out.println("0   quit");
         System.out.println("");
     }
@@ -216,6 +225,38 @@ public class Application {
         }
 
         pub.addBeer(beer);
+        server.save(pub);
+    }
+
+    private void showBeersInPub() {
+        System.out.print("Which pub to list: ");
+        String pubname = scanner.nextLine();
+        Pub pub = server.find(Pub.class).where().like("name", pubname).findUnique();
+        List<Beer> beers = pub.getBeers();
+        for(Beer beer: beers){
+            System.out.println(beer.getName());
+        }
+    }
+
+    private void listPubs() {
+        List<Pub> pubs = server.find(Pub.class).findList();
+        for(Pub pub: pubs){
+            System.out.println(pub.getName());
+        }
+    }
+    
+    private void removePub(){
+        System.out.print("Which pub: ");
+        String pname = scanner.nextLine();
+        Pub pub = server.find(Pub.class).where().like("name", pname).findUnique();
+        List<Beer> beers = pub.getBeers();
+        for(int i = 0; i < beers.size(); i++){
+            System.out.println(i + ") " + beers.get(i));
+        }
+        System.out.print("Which beer: ");
+        int num = scanner.nextInt();
+        Beer b = beers.get(num);
+        pub.removeBeer(b);
         server.save(pub);
     }
 

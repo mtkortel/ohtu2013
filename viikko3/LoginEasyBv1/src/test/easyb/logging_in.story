@@ -37,6 +37,12 @@ scenario "user can not login with incorrect password", {
 
 scenario "nonexistent user can not login to ", {
     given 'command login selected'
+        userDao = new InMemoryUserDao()
+       auth = new AuthenticationService(userDao)
+       io = new StubIO("login", "pekka234", "akkep") 
+       app = new App(io, auth)
     when 'a nonexistent username and some password are entered'
+        app.run()
     then 'user will not be logged in to system'
+        io.getPrints().shouldNotHave("logged in")
 }
