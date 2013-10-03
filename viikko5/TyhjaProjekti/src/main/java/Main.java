@@ -17,6 +17,7 @@ public class Main {
             studentNr = args[0];
         }
         // Muutos 1
+        // Muutos 2
         String url = "http://ohtustats-2013.herokuapp.com/opiskelija/"+studentNr+".json";
  
         HttpClient client = new HttpClient();
