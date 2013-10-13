@@ -11,27 +11,24 @@ public class IntJoukko {
     private int alkioidenLkm;    // Tyhjässä joukossa alkioiden_määrä on nolla. 
 
     public IntJoukko() {
-        ljono = new int[KAPASITEETTI];
-        for (int i = 0; i < ljono.length; i++) {
-            ljono[i] = 0;
-        }
-        alkioidenLkm = 0;
-        this.kasvatuskoko = OLETUSKASVATUS;
+        teeJono(KAPASITEETTI, OLETUSKASVATUS);
     }
 
     public IntJoukko(int kapasiteetti) {
         if (kapasiteetti < 0) {
             return;
         }
+        teeJono(kapasiteetti, OLETUSKASVATUS);
+
+    }
+    private void teeJono(int kapasiteetti, int kasvatuskoko){
         ljono = new int[kapasiteetti];
         for (int i = 0; i < ljono.length; i++) {
             ljono[i] = 0;
         }
         alkioidenLkm = 0;
-        this.kasvatuskoko = OLETUSKASVATUS;
-
+        this.kasvatuskoko = kasvatuskoko;
     }
-    
     
     public IntJoukko(int kapasiteetti, int kasvatuskoko) {
         if (kapasiteetti < 0) {
@@ -40,18 +37,12 @@ public class IntJoukko {
         if (kasvatuskoko < 0) {
             throw new IndexOutOfBoundsException("kapasiteetti2");//heitin vaan jotain :D
         }
-        ljono = new int[kapasiteetti];
-        for (int i = 0; i < ljono.length; i++) {
-            ljono[i] = 0;
-        }
-        alkioidenLkm = 0;
-        this.kasvatuskoko = kasvatuskoko;
-
+        teeJono(kapasiteetti, kasvatuskoko);
     }
 
     public boolean lisaa(int luku) {
 
-        int eiOle = 0;
+        //int eiOle = 0;
         if (alkioidenLkm == 0) {
             ljono[0] = luku;
             alkioidenLkm++;
@@ -62,7 +53,7 @@ public class IntJoukko {
             ljono[alkioidenLkm] = luku;
             alkioidenLkm++;
             if (alkioidenLkm % ljono.length == 0) {
-                int[] taulukkoOld = new int[ljono.length];
+                int[] taulukkoOld;// = new int[ljono.length];
                 taulukkoOld = ljono;
                 kopioiTaulukko(ljono, taulukkoOld);
                 ljono = new int[alkioidenLkm + kasvatuskoko];
@@ -86,10 +77,8 @@ public class IntJoukko {
             return false;
         }
     }
-
-    public boolean poista(int luku) {
-        int kohta = -1;
-        int apu;
+    private int haeKohta(int luku){
+        int kohta=-1;
         for (int i = 0; i < alkioidenLkm; i++) {
             if (luku == ljono[i]) {
                 kohta = i; //siis luku löytyy tuosta kohdasta :D
@@ -97,6 +86,13 @@ public class IntJoukko {
                 break;
             }
         }
+        return kohta;
+    }
+
+    public boolean poista(int luku) {
+        int kohta = -1;
+        int apu;
+        kohta=haeKohta(luku);
         if (kohta != -1) {
             for (int j = kohta; j < alkioidenLkm - 1; j++) {
                 apu = ljono[j];
